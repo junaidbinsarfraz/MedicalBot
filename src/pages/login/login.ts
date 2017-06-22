@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController } from 'ionic-angular';
 import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
 import { TabsPage } from '../tabs/tabs';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'page-login',
@@ -18,7 +19,7 @@ export class LoginPage {
   contactNumber: string = '';
   username: string = '';
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http) {
   }
 
   ionViewDidLoad() {
@@ -30,11 +31,20 @@ export class LoginPage {
   otherwise show it
   */
   doLogin() {
-    
+    var link = 'http://localhost:31727/WS/Login';
+        var data = JSON.stringify({username: this.username, password: this.password});
+        
+        this.http.post(link, data)
+        .subscribe(data => {
+            console.log(data);
+        }, error => {
+            console.log("Oooops!");
+        });
+    this.showLogin = true;
   }
 
   doRegister() {
-    
+    this.showLogin = false;
   }
 
 }
